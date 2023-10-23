@@ -60,12 +60,12 @@ exports.getUser = (req, res) => {
     return res
       .status(404)
       .json({ error: `username: ${username} is not found` });
-  } else {
-    let queriedUser = { ...user };
-    if (req.query["currency"] === "USD") {
-      queriedUser.funds = 3 * user.funds;
-      return res.status(200).json(queriedUser);
-    }
-    return res.status(200).json(user);
   }
+  let queriedUser = { ...user };
+  const currency = req.query["currency"];
+  if (currency === "usd" || "USD") {
+    queriedUser.funds = 3 * user.funds;
+    return res.status(200).json(queriedUser);
+  }
+  return res.status(200).json(user);
 };
