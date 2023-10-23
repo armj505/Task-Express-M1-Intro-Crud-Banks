@@ -11,7 +11,7 @@ exports.createAccount = (req, res) => {
   }
 
   const newAccount = {
-    id: accounts.length + 1,
+    id: accounts[accounts.length - 1].id + 1,
     username,
     funds: 0,
   };
@@ -32,8 +32,8 @@ exports.deleteAccount = (req, res) => {
 
 exports.updateAccount = (req, res) => {
   const accountId = req.params["accountId"];
-  const account = accounts.find((a) => a.id == accountId);
   const { username, funds } = req.body;
+  const account = accounts.find((a) => a.id == accountId);
 
   if (!username || !funds) {
     return res.status(400).json({ error: "Missing requirements" });
@@ -42,12 +42,12 @@ exports.updateAccount = (req, res) => {
   if (!account) {
     return res.status(404).json({ error: ` Id: ${accountId} is not found` });
   } else {
-    const editAccount = (accounts[accountId - 1] = {
+    accounts[accountId - 1] = {
       id: parseInt(accountId),
       username,
       funds,
-    });
-    return res.status(204).json(editAccount);
+    };
+    return res.status(204).json(accounts);
   }
 };
 
